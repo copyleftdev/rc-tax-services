@@ -1,0 +1,17 @@
+[package]
+name = "compute"
+version = "0.2.0"
+edition = "2021"
+
+[dependencies]
+axum = "0.6"
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+# Enable "signal" to fix unresolved import `tokio::signal`
+tokio = { version = "1.0", features = ["rt-multi-thread", "macros", "signal"] }
+common = { path = "../common" }
+sqlx = { version = "0.6", features = ["runtime-tokio-rustls", "postgres"] }
+uuid = "1.4"
+anyhow = "1.0"
+
+# Removed the `[lib]` section so Cargo doesn't look for src/lib.rs
