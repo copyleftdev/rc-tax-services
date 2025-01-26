@@ -10,7 +10,7 @@ This repository showcases:
 - A **Compute** service (handling property records + DB inserts)
 - An **Ingest** service (optional WebSocket-based pipeline)
 - A **Loadtest** service (Rust-based)  
-- An **alternative K6** script for more advanced, scenario-based testing
+- An **alternative K6** script for advanced scenario-based testing
 
 All coded swiftly to highlight that huge vendor solutions often **overpromise** and **underdeliver**, while simpler approaches can get the job done faster, cheaper, and more efficiently.
 
@@ -18,34 +18,34 @@ All coded swiftly to highlight that huge vendor solutions often **overpromise** 
 
 ## Bloat vs. Lean (Mermaid Diagram)
 
-Below is a **Mermaid** diagram contrasting the **bloated** vs. **lean** approach:
+Below is a **Mermaid** diagram comparing a typical **over-bloated** enterprise approach vs. **RC Tax Services**’ lean design:
 
 ```mermaid
 flowchart LR
 
-    subgraph "Typical Over-Bloated Stack"
-      direction TB
-      A[Legacy Vendor<br>Portal UI] --> B[Massive<br>Service Bus]
-      B --> C[Overly Complex<br>Workflow Engine]
-      C --> D[Large Java EE<br>Monolith or Dozens of JARs]
-      D --> E[Heavy ESB /<br>Integration Layer]
-      E --> F[Complicated DB<br>(Expensive Licenses)]
-      F --> G[Minimal Real Value<br>But Big Price Tag]
-    end
+  subgraph "Typical Over-Bloated Stack"
+    direction TB
+    A["Legacy Vendor\nPortal UI"] --> B["Massive\nService Bus"]
+    B --> C["Overly Complex\nWorkflow Engine"]
+    C --> D["Large Java EE\nMonolith or Dozens of JARs"]
+    D --> E["Heavy ESB /\nIntegration Layer"]
+    E --> F["Complicated DB\n(Expensive Licenses)"]
+    F --> G["Minimal Real Value\nBut Big Price Tag"]
+  end
 
-    subgraph "RC Tax Services"
-      direction TB
-      X[Simple Web UI<br>(Optional)] --> Y[Lean Rust Service(s)]
-      Y --> Z[Postgres DB<br>(Free & Straightforward)]
-      Z --> L[Real Value in Days,<br>Millisecond Latencies]
-    end
+  subgraph "RC Tax Services"
+    direction TB
+    X["Simple Web UI\n(Optional)"] --> Y["Lean Rust Service(s)"]
+    Y --> Z["Postgres DB\n(Free & Straightforward)"]
+    Z --> L["Real Value in Days,\nMillisecond Latencies"]
+  end
 
-    A --- X
+  A --- X
 ```
 
 **What It Shows**:
-- **Over-Bloated**: A typical high-level architecture from big vendors, with a labyrinth of bus layers, huge licensable components, and multiple frameworks. This often results in slow performance, huge complexity, and a painful integration story—despite the high cost.  
-- **RC Tax Services**: A minimal approach—a Rust microservice or two, straightforward Postgres DB, optional Web UI or ingestion service. Built in **days**, with sub-10ms latencies under thousands of RPS.
+- **Over-Bloated**: A typical high-level architecture from big vendors, with a labyrinth of bus layers, huge licensable components, and multiple frameworks—leading to complex, slow, and overpriced solutions.  
+- **RC Tax Services**: A minimal approach—a Rust microservice or two, straightforward Postgres DB, optional Web UI or ingestion. Built in **days**, sub-10ms latencies under thousands of RPS.
 
 ---
 
@@ -53,12 +53,12 @@ flowchart LR
 
 1. **Frustration with Bloat**  
    Big corps keep delivering monstrous solutions to gov agencies at sky-high prices—often with slow UIs, countless layers, and minimal real optimization.  
-2. **Show Don’t Tell**  
+2. **Show, Don’t Tell**  
    In a couple nights, we coded these services from scratch, achieving sub-10ms latencies and thousands of requests per second, on minimal hardware.  
 3. **Simplicity**  
    Rust microservices + straightforward DB schema—no endless vendor “integration.”  
 4. **Scalability**  
-   Our K6 scripts ramp up to hundreds of Virtual Users and attempt up to 1,000+ RPS. The system soaks it easily with near-zero errors.
+   Our K6 scripts ramp up to hundreds of Virtual Users and attempt 1,000+ RPS. The system soaks it easily with near-zero errors.
 
 ---
 
@@ -69,30 +69,32 @@ flowchart LR
    git clone https://github.com/copyleftdev/rc-tax-services.git
    cd rc-tax-services
    ```
+
 2. **Run** via Docker Compose:
    ```bash
    docker compose build
    docker compose up
    ```
-   - `db` container: Postgres on port 5432  
-   - `compute` container: Microservice on port 8080  
-   - `ingest` container: WebSocket-based ingress on port 3000  
-   - `loadtest` container (optional): Fires a quick, integrated Rust load test.
+   - **db** container: Postgres on port 5432  
+   - **compute** container: Microservice on port 8080  
+   - **ingest** container: WebSocket-based ingress on port 3000  
+   - **loadtest** container: A quick, integrated Rust-based load test.
+
 3. **Check** logs. You’ll see `compute` and `ingest` spin up, plus load test results if enabled.
 
 ### K6 Testing
 
-- Install [k6](https://k6.io/docs/getting-started/installation/)  
+- Install [k6](https://k6.io/docs/getting-started/installation/).  
 - Then run:
   ```bash
   cd loadtest/
   BASE_URL=http://localhost:8080 k6 run k6_test.js
   ```
-  or if you want to push extreme concurrency:
+  - or if you want to push extreme concurrency:
   ```bash
   BASE_URL=http://localhost:8080 k6 run extremeLoadTest.js
   ```
-- Observe latencies, RPS, and error rates in the console output.
+- Observe latencies, RPS, error rates in console output.
 
 ---
 
@@ -102,12 +104,13 @@ flowchart LR
 
 ```
 === LOADTEST RESULTS ===
-Total Requests: 874,420  
-RPS: ~2,428  
-Avg Latency: ~2.71ms (p95 ~6.96ms)  
-Errors: 0%  
+Total Requests: 874,420
+RPS: ~2,428
+Avg Latency: ~2.71ms (p95 ~6.96ms)
+Errors: 0%
 ```
-No errors, sub-7ms 95th percentile—even at thousands of requests per second—showing it’s entirely possible to avoid “enterprise meltdown.”
+
+No errors, sub-7ms 95th percentile—even at thousands of requests per second—**no meltdown** or big overhead.
 
 ---
 
@@ -122,15 +125,14 @@ No errors, sub-7ms 95th percentile—even at thousands of requests per second—
 
 ## Disclaimer
 
-- **Prototype**: This code is a reference example—not fully production-grade (no advanced auth, multi-region DB, etc.).  
-- **Scaling**: For truly massive traffic, you might add caching, replication, or more robust logic.  
-- **Real Data**: Adjust field definitions for your actual county or governmental needs.
+- **Prototype**: Not fully production-grade (no advanced auth, multi-region DB, etc.).  
+- **Scaling**: For truly massive traffic, add caching, replication, or advanced logic.  
+- **Real Data**: Adjust field definitions for real government/agency needs.
 
 ---
 
 ## Conclusion
 
-**rc-tax-services** demonstrates a **middle finger** to those who claim only monstrous, overpriced software can serve government agencies effectively. **Yes**, you can do better: simpler architecture, Rust or similarly efficient languages, direct Postgres usage, and thorough load testing can deliver blazing-fast solutions on modest hardware—**in just days.**
+**rc-tax-services** is a **middle finger** to the idea that only huge, overpriced software can serve government agencies effectively. **Yes**, you can do better: simpler architecture, Rust or similarly efficient languages, direct Postgres usage, and thorough load testing for blazing-fast solutions on modest hardware—**in just days**.
 
-Stop overpaying for bloated solutions. Build something lean, test it thoroughly, and keep your government agency’s software from turning into an endless money pit.
-
+Stop overpaying for bloated solutions. **Build something lean**, test thoroughly, and spare your government agency from endless money pits.
